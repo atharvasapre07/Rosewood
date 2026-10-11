@@ -65,17 +65,23 @@ body {
 }
 
 .hero {
-    padding: 80px 32px;
+    padding: 80px 0;
 }
-.hero h1{
+
+.hero h1 {
     font-size: 3.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     max-width: 630px;
 }
 
-.subtitle{
+.subtitle {
     font-size: 1.25rem;
     color: var(--muted);
     margin-top: 16px;
 }
+
+.content-wrapper {
+    padding: 0 100px;
+}
+
