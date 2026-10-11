@@ -7,8 +7,57 @@
     --accent: #7CC4AE;
 }
 
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body{
     background-color: var(--bg);
     margin: 0;
+    color: var(--text);
+    font-family: 'Manrope', sans-serif;
+}
+
+.site-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 14px;
+}
+
+.logo{
+    display: flex;
+    gap: 9px;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.logo img{
+    width: 24px;
+    height: auto;
+}
+.logo span{
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+.main-nav ul{
+    display: flex;
+    gap: 70px;
+    padding-right: 20px;
+    list-style-type: none;
+}
+
+.main-nav ul a{
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-width: 500;
+    transition: color 0.2s ease;
+}
+.main-nav ul a:hover{
     color: var(--text);
 }
