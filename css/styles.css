@@ -20,6 +20,10 @@ body {
     font-family: 'Manrope', sans-serif;
 }
 
+button {
+    font-family: inherit;
+}
+
 .site-header {
     display: flex;
     justify-content: space-between;
@@ -242,4 +246,75 @@ body {
 #bpm-slider {
     flex: 1;
     accent-color: var(--accent);
+}
+
+.beats{
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.beat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.beat-btn{
+    width: 72px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--line);
+    cursor: pointer;
+    transition: height 0.2s ease;
+}
+
+.beat-btn[data-state="accent"] { height: 112px; }
+.beat-btn[data-state="normal"] { height: 80px; }
+
+.beat-btn[data-state="muted"] {
+    height: 48px;
+    background: transparent;
+    border: 2px dashed var(--line);
+}
+
+.beat-number,
+.beats-hint {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.btn-start,
+.btn-tap {
+    height: 64px;
+    border-radius: 32px;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.btn-start {
+    padding: 0 40px;
+    border: 0;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+}
+
+.btn-tap {
+    padding: 0 32px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+}
+
+.btn-tap:hover {
+    border-color: var(--muted);
 }

@@ -40,8 +40,32 @@
                     aria-label="Tempo in beats per minute">
                 <button class="step-btn" aria-label="Increase tempo">+</button>
             </div>
+            <div class="beats">
+                <div class="beat">
+                    <button class="beat-btn" data-state="accent" aria-label="Beat 1, accent"></button>
+                    <span class="beat-number">1</span>
+                </div>
+                <div class="beat">
+                    <button class="beat-btn" data-state="normal" aria-label="Beat 2, normal"></button>
+                    <span class="beat-number">2</span>
+                </div>
+                <div class="beat">
+                    <button class="beat-btn" data-state="normal" aria-label="Beat 3, normal"></button>
+                    <span class="beat-number">3</span>
+                </div>
+                <div class="beat">
+                    <button class="beat-btn" data-state="muted" aria-label="Beat 4, muted"></button>
+                    <span class="beat-number">4</span>
+                </div>
+            </div>
+            <p class="beats-hint">Tap a beat to switch it between accent, normal and muted.</p>
+
+            <div class="actions">
+                <button class="btn-start">Start</button>
+                <button class="btn-tap">Tap tempo</button>
+            </div>
         </section>
     </main>
-</body> 
+</body>
 
 </html>
