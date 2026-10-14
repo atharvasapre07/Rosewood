@@ -60,11 +60,19 @@ body {
     font-size: 0.95rem;
     font-weight: 500;
     transition: color 0.2s ease;
+    padding-bottom: 6px;
+    border-bottom: 3px solid transparent;
 }
 
 .main-nav ul a:hover {
     color: var(--text);
     text-shadow: 0 0 0.5px var(--text);
+}
+
+.main-nav ul a[aria-current="page"] {
+    color: var(--text);
+    font-weight: 600;
+    border-bottom-color: var(--accent);
 }
 
 .hero {
