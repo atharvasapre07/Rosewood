@@ -247,7 +247,7 @@ button {
     accent-color: var(--accent);
 }
 
-.beats{
+.beats {
     display: flex;
     align-items: flex-end;
     gap: 12px;
@@ -260,7 +260,7 @@ button {
     gap: 8px;
 }
 
-.beat-btn{
+.beat-btn {
     width: 72px;
     border: 0;
     border-radius: 10px;
@@ -269,8 +269,13 @@ button {
     transition: height 0.2s ease;
 }
 
-.beat-btn[data-state="accent"] { height: 112px; }
-.beat-btn[data-state="normal"] { height: 80px; }
+.beat-btn[data-state="accent"] {
+    height: 112px;
+}
+
+.beat-btn[data-state="normal"] {
+    height: 80px;
+}
 
 .beat-btn[data-state="muted"] {
     height: 48px;
@@ -329,6 +334,9 @@ button {
 .metronome-panel {
     flex: 2 1 560px;
     min-width: 0;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
 }
 
 .settings-panel {
@@ -419,4 +427,20 @@ button {
     font-size: 2rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+}
+
+.frets {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    --fret: rgba(237, 230, 214, 0.07);
+    background:
+        linear-gradient(rgba(237, 230, 214, 0.14), rgba(237, 230, 214, 0.14)) 0 0 / 10px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 16.9% 0 / 2px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 32.8% 0 / 2px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 47.8% 0 / 2px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 62% 0 / 2px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 75.4% 0 / 2px 100% no-repeat,
+        linear-gradient(var(--fret), var(--fret)) 88.1% 0 / 2px 100% no-repeat;
 }
