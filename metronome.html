@@ -29,42 +29,96 @@
     </header>
 
     <main class="content-wrapper">
-        <section class="metronome-panel">
-            <p class="tempo-name">Andante</p>
-            <div class="bpm-display" id="bpm-value">96</div>
-            <p class="bpm-label">beats per minute</p>
+        <div class="metronome-layout">
+            <section class="metronome-panel">
+                <p class="tempo-name">Andante</p>
+                <div class="bpm-display" id="bpm-value">96</div>
+                <p class="bpm-label">beats per minute</p>
+                <div class="bpm-controls">
+                    <button class="step-btn" aria-label="Decrease tempo">&minus;</button>
+                    <input type="range" id="bpm-slider" min="30" max="240" value="96"
+                        aria-label="Tempo in beats per minute">
+                    <button class="step-btn" aria-label="Increase tempo">+</button>
+                </div>
+                <div class="beats">
+                    <div class="beat">
+                        <button class="beat-btn" data-state="accent" aria-label="Beat 1, accent"></button>
+                        <span class="beat-number">1</span>
+                    </div>
+                    <div class="beat">
+                        <button class="beat-btn" data-state="normal" aria-label="Beat 2, normal"></button>
+                        <span class="beat-number">2</span>
+                    </div>
+                    <div class="beat">
+                        <button class="beat-btn" data-state="normal" aria-label="Beat 3, normal"></button>
+                        <span class="beat-number">3</span>
+                    </div>
+                    <div class="beat">
+                        <button class="beat-btn" data-state="muted" aria-label="Beat 4, muted"></button>
+                        <span class="beat-number">4</span>
+                    </div>
+                </div>
+                <p class="beats-hint">Tap a beat to switch it between accent, normal and muted.</p>
+                <div class="actions">
+                    <button class="btn-start">Start</button>
+                    <button class="btn-tap">Tap tempo</button>
+                </div>
+            </section>
 
-            <div class="bpm-controls">
-                <button class="step-btn" aria-label="Decrease tempo">&minus;</button>
-                <input type="range" id="bpm-slider" min="30" max="240" value="96"
-                    aria-label="Tempo in beats per minute">
-                <button class="step-btn" aria-label="Increase tempo">+</button>
-            </div>
-            <div class="beats">
-                <div class="beat">
-                    <button class="beat-btn" data-state="accent" aria-label="Beat 1, accent"></button>
-                    <span class="beat-number">1</span>
-                </div>
-                <div class="beat">
-                    <button class="beat-btn" data-state="normal" aria-label="Beat 2, normal"></button>
-                    <span class="beat-number">2</span>
-                </div>
-                <div class="beat">
-                    <button class="beat-btn" data-state="normal" aria-label="Beat 3, normal"></button>
-                    <span class="beat-number">3</span>
-                </div>
-                <div class="beat">
-                    <button class="beat-btn" data-state="muted" aria-label="Beat 4, muted"></button>
-                    <span class="beat-number">4</span>
-                </div>
-            </div>
-            <p class="beats-hint">Tap a beat to switch it between accent, normal and muted.</p>
+             <section class="settings-panel" aria-label="Settings">
 
-            <div class="actions">
-                <button class="btn-start">Start</button>
-                <button class="btn-tap">Tap tempo</button>
-            </div>
-        </section>
+                <div class="setting">
+                    <h2>Beats per bar</h2>
+                    <div class="stepper">
+                        <button class="step-btn" aria-label="Fewer beats per bar">&minus;</button>
+                        <span class="stepper-value" id="beats-value">4</span>
+                        <button class="step-btn" aria-label="More beats per bar">+</button>
+                    </div>
+                    <p class="setting-hint">Changes start at the next bar.</p>
+                </div>
+
+                <div class="setting">
+                    <h2>Subdivisions</h2>
+                    <select id="subdivision" aria-label="Subdivision type">
+                        <option value="1">None</option>
+                        <option value="2" selected>Eighths</option>
+                        <option value="3">Triplets</option>
+                        <option value="4">Sixteenths</option>
+                        <option value="5">Quintuplets</option>
+                        <option value="6">Sixteenth triplets</option>
+                        <option value="swing">Swing</option>
+                    </select>
+                    <label for="sub-volume">Subdivision volume</label>
+                    <input type="range" id="sub-volume" min="0" max="100" value="55">
+                </div>
+
+                <div class="setting">
+                    <h2>Sound</h2>
+                    <select id="wave" aria-label="Wave type">
+                        <option value="sine">Sine</option>
+                        <option value="triangle" selected>Triangle</option>
+                        <option value="square">Square</option>
+                        <option value="sawtooth">Sawtooth</option>
+                    </select>
+                    <label for="master-volume">Master volume</label>
+                    <input type="range" id="master-volume" min="0" max="100" value="80">
+                </div>
+
+                <div class="setting">
+                    <h2>Auto-stop timer</h2>
+                    <label class="check"><input type="checkbox" id="timer-on"> Stop the metronome after</label>
+                    <div class="stepper">
+                        <button class="step-btn" aria-label="Fewer minutes">&minus;</button>
+                        <span class="stepper-value" id="timer-value">10</span>
+                        <button class="step-btn" aria-label="More minutes">+</button>
+                        <span>minutes</span>
+                    </div>
+                </div>
+
+            </section>
+        </div> 
+    </main>
+        </div>
     </main>
 </body>
 
