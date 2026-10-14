@@ -181,7 +181,7 @@ body {
         linear-gradient(var(--string), var(--string)) 0 86% / 100% 3px no-repeat;
 }
 
-.metronome-panel{
+.metronome-panel {
     margin-top: 40px;
     background-color: var(--panel);
     border: 1px solid var(--line);
@@ -190,9 +190,10 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 24px;
+    border-radius: 12px;
 }
 
-.tempo-name{
+.tempo-name {
     color: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 999px;
@@ -211,4 +212,34 @@ body {
 .bpm-label {
     color: var(--muted);
     font-size: 1rem;
+}
+
+.bpm-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 560px;
+}
+
+.step-btn {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.step-btn:hover {
+    border-color: var(--muted);
+}
+
+#bpm-slider {
+    flex: 1;
+    accent-color: var(--accent);
 }
