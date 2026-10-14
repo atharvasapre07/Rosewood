@@ -27,6 +27,21 @@
             </ul>
         </nav>
     </header>
-</body>
+
+    <main class="content-wrapper">
+        <section class="metronome-panel">
+            <p class="tempo-name">Andante</p>
+            <div class="bpm-display" id="bpm-value">96</div>
+            <p class="bpm-label">beats per minute</p>
+
+            <div class="bpm-controls">
+                <button class="step-btn" aria-label="Decrease tempo">&minus;</button>
+                <input type="range" id="bpm-slider" min="30" max="240" value="96"
+                    aria-label="Tempo in beats per minute">
+                <button class="step-btn" aria-label="Increase tempo">+</button>
+            </div>
+        </section>
+    </main>
+</body> 
 
 </html>

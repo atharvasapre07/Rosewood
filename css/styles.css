@@ -180,3 +180,35 @@ body {
         linear-gradient(var(--string), var(--string)) 0 72% / 100% 2.5px no-repeat,
         linear-gradient(var(--string), var(--string)) 0 86% / 100% 3px no-repeat;
 }
+
+.metronome-panel{
+    margin-top: 40px;
+    background-color: var(--panel);
+    border: 1px solid var(--line);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.tempo-name{
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-size: 1.1rem;
+}
+
+.bpm-display {
+    font-size: clamp(6rem, 18vw, 12.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.bpm-label {
+    color: var(--muted);
+    font-size: 1rem;
+}
