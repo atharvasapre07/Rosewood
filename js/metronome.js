@@ -40,3 +40,23 @@ function getTempoName(bpm) {
     const tempo = TEMPO_NAMES.find(t => t.max >= bpm);
     return tempo ? tempo.name : 'Unknown';
 }
+
+$('#start-btn').on('click', function () {
+    const audioCtx = new AudioContext();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'triangle';
+    osc.frequency.value = 1000;
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.3, now + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    osc.start(now);
+    osc.stop(now + 0.06);
+});
