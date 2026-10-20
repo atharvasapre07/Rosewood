@@ -60,11 +60,43 @@ function playClick(time) {
     osc.stop(time + 0.06);
 }
 
+const LOOKAHEAD_MS = 25;
+const SCHEDULE_AHEAD_SEC = 0.1;
+
+let isPlaying = false;
+let nextNoteTime = 0;
+let timerId = null;
+
+function scheduler() {
+    while (nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
+        playClick(nextNoteTime);
+        nextNoteTime += 60 / Number($('#bpm-slider').val());
+    }
+}
+
+function startMetronome() {
+    isPlaying = true;
+    nextNoteTime = audioCtx.currentTime + 0.05;
+    scheduler();
+    timerId = setInterval(scheduler, LOOKAHEAD_MS);
+}
+
+function stopMetronome() {
+    isPlaying = false;
+    clearInterval(timerId);
+}
 
 $('#start-btn').on('click', function () {
     if (!audioCtx) {
         audioCtx = new AudioContext();
     }
     audioCtx.resume();
-    playClick(audioCtx.currentTime);
+
+    if (isPlaying) {
+        stopMetronome();
+        $(this).text('Start');
+    } else {
+        startMetronome();
+        $(this).text('Stop');
+    }
 });
