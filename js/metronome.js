@@ -12,3 +12,11 @@ $('#bpm-slider').on('input', function () {
 });
 
 updateBpm(Number($('#bpm-slider').val()));
+
+$('#bpm-up').on('click', function () {
+    updateBpm(Number($('#bpm-slider').val()) + 1);
+});
+
+$('#bpm-down').on('click', function () {
+    updateBpm(Number($('#bpm-slider').val()) - 1);
+});
