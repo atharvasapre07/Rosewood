@@ -16,6 +16,12 @@ const TEMPO_NAMES = [
     { max: Infinity, name: 'Prestissimo' }
 ];
 
+const CLICK_SOUNDS = {
+    accent: { freq: 1500, volume: 0.4 },
+    normal: { freq: 1000, volume: 0.25 },
+    muted:  { freq: 0,    volume: 0 }
+};
+
 function updateBpm(bpm) {
     const clamped = Math.min(MAX_BPM, Math.max(MIN_BPM, bpm));
     $('#bpm-slider').val(clamped);
@@ -42,18 +48,21 @@ function getTempoName(bpm) {
     return tempo ? tempo.name : 'Unknown';
 }
 
-function playClick(time) {
+function playClick(time, state) {
+    if (state === 'muted') return;
+    const sound = CLICK_SOUNDS[state];
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
     osc.type = 'triangle';
-    osc.frequency.value = 1000;
+    osc.frequency.value = sound.freq;
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
     gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(0.3, time + 0.002);
+    gain.gain.linearRampToValueAtTime(sound.volume, time + 0.002);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
 
     osc.start(time);
@@ -69,13 +78,16 @@ let timerId = null;
 
 function scheduler() {
     while (nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
-        playClick(nextNoteTime);
+        const state = $('.beat-btn').eq(currentBeat).attr('data-state');
+        playClick(nextNoteTime, state);
         nextNoteTime += 60 / Number($('#bpm-slider').val());
+        currentBeat = (currentBeat + 1) % $('.beat-btn').length;
     }
 }
 
 function startMetronome() {
     isPlaying = true;
+    currentBeat = 0;
     nextNoteTime = audioCtx.currentTime + 0.05;
     scheduler();
     timerId = setInterval(scheduler, LOOKAHEAD_MS);
