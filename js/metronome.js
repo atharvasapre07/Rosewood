@@ -1,5 +1,6 @@
 const MIN_BPM = 30;
 const MAX_BPM = 300;
+let audioCtx = null;
 
 const TEMPO_NAMES = [
     { max: 40,       name: 'Grave' },
@@ -41,8 +42,7 @@ function getTempoName(bpm) {
     return tempo ? tempo.name : 'Unknown';
 }
 
-$('#start-btn').on('click', function () {
-    const audioCtx = new AudioContext();
+function playClick(time) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -52,11 +52,19 @@ $('#start-btn').on('click', function () {
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
-    const now = audioCtx.currentTime;
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.3, now + 0.002);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.3, time + 0.002);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
 
-    osc.start(now);
-    osc.stop(now + 0.06);
+    osc.start(time);
+    osc.stop(time + 0.06);
+}
+
+
+$('#start-btn').on('click', function () {
+    if (!audioCtx) {
+        audioCtx = new AudioContext();
+    }
+    audioCtx.resume();
+    playClick(audioCtx.currentTime);
 });
