@@ -1,6 +1,7 @@
 const MIN_BPM = 30;
 const MAX_BPM = 300;
 let audioCtx = null;
+const BEAT_STATES = ['accent', 'normal', 'muted'];
 
 const TEMPO_NAMES = [
     { max: 40,       name: 'Grave' },
@@ -111,4 +112,13 @@ $('#start-btn').on('click', function () {
         startMetronome();
         $(this).text('Stop');
     }
+});
+
+$('.beat-btn').on('click', function () {
+    const current = $(this).attr('data-state');
+    const next = BEAT_STATES[(BEAT_STATES.indexOf(current) + 1) % BEAT_STATES.length];
+    const beatNumber = $('.beat-btn').index(this) + 1;
+
+    $(this).attr('data-state', next);
+    $(this).attr('aria-label', `Beat ${beatNumber}, ${next}`);
 });
