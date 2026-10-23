@@ -72,9 +72,9 @@
                 <div class="setting">
                     <h2>Beats per bar</h2>
                     <div class="stepper">
-                        <button class="step-btn" aria-label="Fewer beats per bar">&minus;</button>
+                        <button id="beats-down" class="step-btn" aria-label="Fewer beats per bar">&minus;</button>
                         <span class="stepper-value" id="beats-value">4</span>
-                        <button class="step-btn" aria-label="More beats per bar">+</button>
+                        <button id="beats-up" class="step-btn" aria-label="More beats per bar">+</button>
                     </div>
                     <p class="setting-hint">Changes start at the next bar.</p>
                 </div>
@@ -82,8 +82,8 @@
                 <div class="setting">
                     <h2>Subdivisions</h2>
                     <select id="subdivision" aria-label="Subdivision type">
-                        <option value="1">None</option>
-                        <option value="2" selected>Eighths</option>
+                        <option value="1" selected>None</option>
+                        <option value="2" >Eighths</option>
                         <option value="3">Triplets</option>
                         <option value="4">Sixteenths</option>
                         <option value="5">Quintuplets</option>

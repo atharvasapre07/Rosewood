@@ -1,6 +1,9 @@
 const MIN_BPM = 30;
 const MAX_BPM = 300;
-let audioCtx = null;
+const MIN_BEATS = 1;
+const MAX_BEATS = 12;
+const LOOKAHEAD_MS = 25;
+const SCHEDULE_AHEAD_SEC = 0.1;
 const BEAT_STATES = ['accent', 'normal', 'muted'];
 
 const TEMPO_NAMES = [
@@ -20,8 +23,22 @@ const TEMPO_NAMES = [
 const CLICK_SOUNDS = {
     accent: { freq: 1500, volume: 0.4 },
     normal: { freq: 1000, volume: 0.25 },
-    muted:  { freq: 0,    volume: 0 }
+    muted:  { freq: 0,    volume: 0 },
+    sub:    { freq: 800,  volume: 0.12 }
 };
+
+let audioCtx = null;
+let masterGain = null;
+let isPlaying = false;
+let nextNoteTime = 0;
+let timerId = null;
+let currentBeat = 0;
+let currentTick = 0;
+
+function getTempoName(bpm) {
+    const tempo = TEMPO_NAMES.find(t => t.max >= bpm);
+    return tempo ? tempo.name : 'Unknown';
+}
 
 function updateBpm(bpm) {
     const clamped = Math.min(MAX_BPM, Math.max(MIN_BPM, bpm));
@@ -30,65 +47,85 @@ function updateBpm(bpm) {
     $('.tempo-name').text(getTempoName(clamped));
 }
 
-$('#bpm-slider').on('input', function () {
-    updateBpm(Number($(this).val()));
-});
+function setBeats(count) {
+    const clamped = Math.min(MAX_BEATS, Math.max(MIN_BEATS, count));
+    let current = $('.beat').length;
 
-updateBpm(Number($('#bpm-slider').val()));
+    while (current < clamped) {
+        current++;
+        $('.beats').append(`
+            <div class="beat">
+                <button class="beat-btn" data-state="normal" aria-label="Beat ${current}, normal"></button>
+                <span class="beat-number">${current}</span>
+            </div>
+        `);
+    }
 
-$('#bpm-up').on('click', function () {
-    updateBpm(Number($('#bpm-slider').val()) + 1);
-});
+    while (current > clamped) {
+        $('.beat').last().remove();
+        current--;
+    }
 
-$('#bpm-down').on('click', function () {
-    updateBpm(Number($('#bpm-slider').val()) - 1);
-});
-
-function getTempoName(bpm) {
-    const tempo = TEMPO_NAMES.find(t => t.max >= bpm);
-    return tempo ? tempo.name : 'Unknown';
+    $('#beats-value').text(clamped);
 }
 
 function playClick(time, state) {
     if (state === 'muted') return;
     const sound = CLICK_SOUNDS[state];
 
+    let volume = sound.volume;
+    if (state === 'sub') {
+        volume = CLICK_SOUNDS.accent.volume * Number($('#sub-volume').val()) / 100;
+    }
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
-    osc.type = 'triangle';
+    osc.type = $('#wave').val();
     osc.frequency.value = sound.freq;
 
     osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(masterGain);
 
     gain.gain.setValueAtTime(0, time);
-    gain.gain.linearRampToValueAtTime(sound.volume, time + 0.002);
+    gain.gain.linearRampToValueAtTime(volume, time + 0.002);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
 
     osc.start(time);
     osc.stop(time + 0.06);
 }
 
-const LOOKAHEAD_MS = 25;
-const SCHEDULE_AHEAD_SEC = 0.1;
-
-let isPlaying = false;
-let nextNoteTime = 0;
-let timerId = null;
+function updateMasterVolume() {
+    if (!masterGain) return;
+    const volume = Number($('#master-volume').val()) / 100;
+    masterGain.gain.setTargetAtTime(volume, audioCtx.currentTime, 0.01);
+}
 
 function scheduler() {
     while (nextNoteTime < audioCtx.currentTime + SCHEDULE_AHEAD_SEC) {
-        const state = $('.beat-btn').eq(currentBeat).attr('data-state');
+        const beatCount = $('.beat-btn').length;
+        if (currentBeat >= beatCount) currentBeat = 0;
+
+        const ticks = Number($('#subdivision').val()) || 2;
+        const state = currentTick === 0
+            ? $('.beat-btn').eq(currentBeat).attr('data-state')
+            : 'sub';
+
         playClick(nextNoteTime, state);
-        nextNoteTime += 60 / Number($('#bpm-slider').val());
-        currentBeat = (currentBeat + 1) % $('.beat-btn').length;
+        nextNoteTime += 60 / Number($('#bpm-slider').val()) / ticks;
+
+        currentTick++;
+        if (currentTick >= ticks) {
+            currentTick = 0;
+            currentBeat = (currentBeat + 1) % beatCount;
+        }
     }
 }
 
 function startMetronome() {
     isPlaying = true;
     currentBeat = 0;
+    currentTick = 0;
     nextNoteTime = audioCtx.currentTime + 0.05;
     scheduler();
     timerId = setInterval(scheduler, LOOKAHEAD_MS);
@@ -99,9 +136,43 @@ function stopMetronome() {
     clearInterval(timerId);
 }
 
+$('#bpm-slider').on('input', function () {
+    updateBpm(Number($(this).val()));
+});
+
+$('#bpm-up').on('click', function () {
+    updateBpm(Number($('#bpm-slider').val()) + 1);
+});
+
+$('#bpm-down').on('click', function () {
+    updateBpm(Number($('#bpm-slider').val()) - 1);
+});
+
+$('#beats-up').on('click', function () {
+    setBeats($('.beat').length + 1);
+});
+
+$('#beats-down').on('click', function () {
+    setBeats($('.beat').length - 1);
+});
+
+$('#master-volume').on('input', updateMasterVolume);
+
+$('.beats').on('click', '.beat-btn', function () {
+    const current = $(this).attr('data-state');
+    const next = BEAT_STATES[(BEAT_STATES.indexOf(current) + 1) % BEAT_STATES.length];
+    const beatNumber = $('.beat-btn').index(this) + 1;
+
+    $(this).attr('data-state', next);
+    $(this).attr('aria-label', `Beat ${beatNumber}, ${next}`);
+});
+
 $('#start-btn').on('click', function () {
     if (!audioCtx) {
         audioCtx = new AudioContext();
+        masterGain = audioCtx.createGain();
+        masterGain.connect(audioCtx.destination);
+        updateMasterVolume();
     }
     audioCtx.resume();
 
@@ -114,11 +185,4 @@ $('#start-btn').on('click', function () {
     }
 });
 
-$('.beat-btn').on('click', function () {
-    const current = $(this).attr('data-state');
-    const next = BEAT_STATES[(BEAT_STATES.indexOf(current) + 1) % BEAT_STATES.length];
-    const beatNumber = $('.beat-btn').index(this) + 1;
-
-    $(this).attr('data-state', next);
-    $(this).attr('aria-label', `Beat ${beatNumber}, ${next}`);
-});
+updateBpm(Number($('#bpm-slider').val()));
